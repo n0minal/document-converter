@@ -1,6 +1,6 @@
 export const AllowedContentTypes = {
-  X12: 'application/edi-x12',
-  EDIFACT: 'application/edifact',
-  JSON: 'application/json',
-  XML: 'application/xml',
+  x12: 'application/edi-x12',
+  edifact: 'application/edifact',
+  json: 'application/json',
+  xml: 'application/xml',
 };
