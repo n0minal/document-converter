@@ -11,7 +11,7 @@ export class EdiX12Document extends SerializableDocument<EdiX12Type> {
     protected readonly contentType: string,
     protected readonly options: SerializationOptions,
   ) {
-    super(document, contentType);
+    super(document, contentType, options);
   }
 
   /**
