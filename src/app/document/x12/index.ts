@@ -1,13 +1,15 @@
-import ConvertibleDocument from '../convertible-document';
+import SerializableDocument from '../serializable-document';
+import { SerializationOptions } from '../serializable-document.factory';
 
-type EdiX12Type = string;
+export type EdiX12Type = string;
 
-export class EdiX12Document extends ConvertibleDocument<EdiX12Type> {
+export class EdiX12Document extends SerializableDocument<EdiX12Type> {
+  serializedDocument: string;
+
   constructor(
-    protected readonly document: EdiX12Type,
+    protected readonly document: EdiX12Type | string,
     protected readonly contentType: string,
-    protected readonly segmentDelimiter: string,
-    protected readonly elementDelimiter: string,
+    protected readonly options: SerializationOptions,
   ) {
     super(document, contentType);
   }
@@ -18,10 +20,13 @@ export class EdiX12Document extends ConvertibleDocument<EdiX12Type> {
    */
   async serialize(): Promise<string> {
     const json = {};
-    const segments = this.document.split(this.segmentDelimiter);
+
+    const { segmentDelimiter, elementDelimiter } = this.options || {};
+
+    const segments = this.document.split(segmentDelimiter);
 
     segments.forEach((segment: string) => {
-      const elements: string[] = segment.split(this.elementDelimiter);
+      const elements: string[] = segment.split(elementDelimiter);
       const segmentName = elements[0];
       const segmentData = elements.slice(1);
 
@@ -42,6 +47,11 @@ export class EdiX12Document extends ConvertibleDocument<EdiX12Type> {
       };
     });
 
-    return JSON.stringify(json);
+    this.serializedDocument = JSON.stringify(json);
+    return this.serializedDocument;
+  }
+
+  async deserialize(): Promise<EdiX12Type> {
+    return '';
   }
 }

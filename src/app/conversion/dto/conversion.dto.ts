@@ -1,5 +1,5 @@
 import { IsIn, IsOptional, IsString } from 'class-validator';
-import { AllowedContentTypes } from '../../constants/allowed-content-types';
+import { AllowedContentTypes } from '../../../constants/allowed-content-types';
 
 export class ConversionDto {
   @IsString()

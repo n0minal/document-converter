@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import * as bodyParser from 'body-parser';
-import { AllowedContentTypes } from 'src/constants/allowed-content-types';
+import { AllowedContentTypes } from '../constants/allowed-content-types';
 
 @Injectable()
 export class BodyParserMiddleware implements NestMiddleware {

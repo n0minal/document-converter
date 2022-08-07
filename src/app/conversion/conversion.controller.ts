@@ -1,6 +1,5 @@
 import { Body, Controller, Post, Query } from '@nestjs/common';
-import { getDocumentTypeFromContentType } from 'src/util/helpers';
-import { RequestHeader } from '../decorators/RequestHeader';
+import { RequestHeader } from '../../decorators/RequestHeader';
 import { ConversionService } from './conversion.service';
 import { ConversionRequestHeadersDto } from './dto/conversion-request-headers.dto';
 import { ConversionDto } from './dto/conversion.dto';

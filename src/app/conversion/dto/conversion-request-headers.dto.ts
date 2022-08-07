@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 import { IsIn, IsString } from 'class-validator';
-import { AllowedContentTypes } from '../../constants/allowed-content-types';
+import { AllowedContentTypes } from '../../../constants/allowed-content-types';
 
 export class ConversionRequestHeadersDto {
   @IsString()
