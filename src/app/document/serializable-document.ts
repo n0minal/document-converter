@@ -1,4 +1,4 @@
-import { SerializationOptions } from './serializable-document.factory';
+import { SerializationOptions } from './serialization-options';
 import { SerializedType } from './types';
 
 export default abstract class SerializableDocument<T> {

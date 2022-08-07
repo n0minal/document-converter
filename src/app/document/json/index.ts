@@ -1,5 +1,5 @@
 import SerializableDocument from '../serializable-document';
-import { SerializationOptions } from '../serializable-document.factory';
+import { SerializationOptions } from '../serialization-options';
 import { SerializedType } from '../types';
 
 export type JsonType = Record<string, any>;
