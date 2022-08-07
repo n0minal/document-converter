@@ -1,5 +1,6 @@
 import SerializableDocument from '../serializable-document';
 import { SerializationOptions } from '../serialization-options';
+import { SerializedType } from '../types';
 
 export type EdiX12Type = string;
 
@@ -7,7 +8,7 @@ export class EdiX12Document extends SerializableDocument<EdiX12Type> {
   serializedDocument: string;
 
   constructor(
-    protected readonly document: EdiX12Type | string,
+    protected readonly document: EdiX12Type | SerializedType,
     protected readonly contentType: string,
     protected readonly options: SerializationOptions,
   ) {
@@ -18,7 +19,11 @@ export class EdiX12Document extends SerializableDocument<EdiX12Type> {
    * @about Converts an X12 document into a serialized JSON string.
    * @returns A promise that resolves to a serialized JSON string.
    */
-  async serialize(): Promise<string> {
+  async serialize(): Promise<SerializedType> {
+    if (this.options?.skipSerialization) {
+      return this.document as SerializedType;
+    }
+
     const json = {};
 
     const { segmentDelimiter, elementDelimiter } = this.options || {};
@@ -52,6 +57,7 @@ export class EdiX12Document extends SerializableDocument<EdiX12Type> {
   }
 
   async deserialize(): Promise<EdiX12Type> {
+    const raw = JSON.parse(this.serializedDocument);
     return '';
   }
 }

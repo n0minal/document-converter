@@ -16,6 +16,10 @@ export class XMLDocument extends SerializableDocument<XmlType> {
   }
 
   async serialize(): Promise<SerializedType> {
+    if (this.options?.skipSerialization) {
+      return this.document as SerializedType;
+    }
+
     const data = await parseStringPromise(this.document);
     this.serializedDocument = JSON.stringify(data);
     return this.serializedDocument;
