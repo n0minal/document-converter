@@ -7,6 +7,10 @@ export class ConversionDto {
   targetFormat: string;
 
   @IsOptional()
-  @IsString({ each: true })
-  separators: string[];
+  @IsString()
+  segmentDelimiter: string;
+
+  @IsOptional()
+  @IsString()
+  elementDelimiter: string;
 }
