@@ -10,7 +10,7 @@ export class ConversionController {
 
   @Post()
   async convert(
-    @Query() { targetFormat, segmentDelimiter, elementDelimiter }: ConversionDto,
+    @Query() { targetFormat, segmentDelimiter, elementDelimiter, parentRootElement }: ConversionDto,
     @Body() document: any,
     @RequestHeader(ConversionRequestHeadersDto)
     headers: ConversionRequestHeadersDto,
@@ -23,6 +23,7 @@ export class ConversionController {
       targetFormat,
       segmentDelimiter,
       elementDelimiter,
+      parentRootElement,
     );
   }
 }
