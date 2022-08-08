@@ -58,6 +58,15 @@ export class EdiX12Document extends SerializableDocument<EdiX12Type> {
 
   async deserialize(): Promise<EdiX12Type> {
     const raw = JSON.parse(this.serializedDocument);
-    return '';
+
+    let edi = '';
+
+    Object.entries(raw).forEach(([segmentName, segmentData]) => {
+      edi += `${segmentName}${this.options.elementDelimiter}${Object.keys(segmentData)
+        .map((key) => segmentData[key])
+        .join(this.options.elementDelimiter)}${this.options.segmentDelimiter}`;
+    });
+
+    return edi;
   }
 }
