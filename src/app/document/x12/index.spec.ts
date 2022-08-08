@@ -38,4 +38,21 @@ describe('X12 Document Conversion Test Suite', () => {
     const result = await document.deserialize();
     expect(result).toEqual(edi);
   });
+
+  it('should deserialize a complex EDI-X12 document', async () => {
+    const { edi, segmentDelimiter, elementDelimiter, serialized } = complexDocument;
+
+    const document = new EdiX12Document(serialized, 'application/edi-x12', {
+      segmentDelimiter,
+      elementDelimiter,
+      skipSerialization: true,
+    });
+
+    const result = await document.deserialize();
+
+    const expectedSegments = edi.split(segmentDelimiter).sort();
+    const resultSegments = result.split(segmentDelimiter).sort();
+
+    expect(expectedSegments).toEqual(resultSegments);
+  });
 });

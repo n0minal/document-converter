@@ -68,31 +68,46 @@ export class EdiX12Document extends SerializableDocument<EdiX12Type> {
    * @about Converts a serialized JSON string into an X12 document.
    */
   async deserialize(): Promise<EdiX12Type> {
+    let result = '';
+
     const raw = JSON.parse(this.serializedDocument);
     const { elementDelimiter, segmentDelimiter } = this.options || {};
-
-    let edi = '';
 
     Object.entries(raw).forEach(([segmentName, segmentData]) => {
       const elements = [];
 
-      Object.values(segmentData).forEach((element) => {
-        if (typeof element === 'object') {
-          const nestedElements = Object.values(element).join(elementDelimiter);
-          edi += `${segmentName}${elementDelimiter}${nestedElements}${segmentDelimiter}`;
-          return;
-        }
+      Object.values(segmentData).forEach((entry) => {
+        if (typeof entry === 'object') {
+          const nestedElements = Object.values(entry);
+          const segment = this.buildSegment(
+            segmentName,
+            elementDelimiter,
+            nestedElements,
+            segmentDelimiter,
+          );
 
-        elements.push(element);
+          result += `${segment}`;
+        } else {
+          elements.push(entry);
+        }
       });
 
       if (elements.length) {
-        edi += `${segmentName}${elementDelimiter}${elements.join(
+        const segment = this.buildSegment(
+          segmentName,
           elementDelimiter,
-        )}${segmentDelimiter}`;
+          elements,
+          segmentDelimiter,
+        );
+
+        result += `${segment}`;
       }
     });
 
-    return edi;
+    return result;
+  }
+
+  buildSegment(segmentName, elementDelimiter, elements, segmentDelimiter) {
+    return `${segmentName}${elementDelimiter}${elements.join(elementDelimiter)}${segmentDelimiter}`;
   }
 }
