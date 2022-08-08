@@ -65,7 +65,7 @@ export type SerializableType = EdiX12Type | XmlType | JsonType | CsvType;
 export type SerializedType = string;
 ```
 
-5. Add your CSVDocument class instance to the list of document providers located at the file `src/document/providers.ts`:
+5. Add your `CSVDocument` class object factory to the list of document providers located at the file `src/document/providers.ts`:
 
 ```ts
 import { BadRequestException } from '@nestjs/common';
