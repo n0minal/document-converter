@@ -86,7 +86,7 @@ export class EdiX12Document extends SerializableDocument<EdiX12Type> {
             segmentDelimiter,
           );
 
-          result += `${segment}`;
+          result += segment;
         } else {
           elements.push(entry);
         }
@@ -100,7 +100,7 @@ export class EdiX12Document extends SerializableDocument<EdiX12Type> {
           segmentDelimiter,
         );
 
-        result += `${segment}`;
+        result += segment;
       }
     });
 
