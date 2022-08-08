@@ -87,43 +87,16 @@ export class CSVDocument extends SerializableDocument<CsvType> {
 4. Add your document type to the derived types of the `SerializableType` type located at `src/document/types.ts` file!
 
 ```ts
-import { EdiX12Type } from './x12';
-import { XmlType } from './xml';
-import { JsonType } from './json';
+...
 import { CsvType } from './csv';
 
 export type SerializableType = EdiX12Type | XmlType | JsonType | CsvType;
-
-export type SerializedType = string;
 ```
 
 5. Add your `CSVDocument` class object factory to the list of document providers located at the file `src/document/providers.ts`:
 
 ```ts
-import { BadRequestException } from '@nestjs/common';
-import { AllowedContentTypes } from '../../constants/allowed-content-types';
-import { JSONDocument, JsonType } from './json';
-import { EdiX12Document, EdiX12Type } from './x12';
-import { XMLDocument, XmlType } from './xml';
-import { CSVDocument, CSVType } from './csv';
-
-export const providers = {
-  [AllowedContentTypes.x12]: (document, contentType, options) => {
-    const { segmentDelimiter, elementDelimiter } = options || {};
-
-    if (!segmentDelimiter || !elementDelimiter)
-      throw new BadRequestException(
-        'Parameters segmentDelimiter and elementDelimiter are required for this document type',
-      );
-
-    return new EdiX12Document(document as EdiX12Type, contentType, options);
-  },
-  [AllowedContentTypes.xml]: (document, contentType, options) => {
-    return new XMLDocument(document as XmlType, contentType, options);
-  },
-  [AllowedContentTypes.json]: (document, contentType, options) => {
-    return new JSONDocument(document as JsonType, contentType, options);
-  },
+  ...
   [AllowedContentTypes.csv]: (document, contentType, options) => {
     return new CSVDocument(document as CsvType, contentType, options);
   },
