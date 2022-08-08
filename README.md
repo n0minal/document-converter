@@ -7,6 +7,11 @@ A simple yet extensible document converter backend application made with Nest.js
 ```bash
 $ npm install
 ```
+## Building the application
+
+```
+$ npm run build
+```
 
 ## Running the app
 
