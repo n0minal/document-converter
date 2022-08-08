@@ -64,6 +64,7 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --data '<your-json-content-goes-here>'
 ```
+
 NOTE: Parameters: `segmentDelimiter` and `elementDelimiter` are always required when converting to and from EDI-X12.
 
 # Adding support to a new document Type
