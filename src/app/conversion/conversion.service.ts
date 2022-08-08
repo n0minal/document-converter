@@ -11,10 +11,12 @@ export class ConversionService {
     targetFormat: string,
     segmentDelimiter?: string,
     elementDelimiter?: string,
+    parentRootElement?: string,
   ) {
     const serializableDocument = createSerializableDocument(document, contentType, {
       segmentDelimiter,
       elementDelimiter,
+      parentRootElement,
     });
 
     const serializedData = await serializableDocument.serialize();
@@ -28,6 +30,7 @@ export class ConversionService {
         segmentDelimiter,
         elementDelimiter,
         skipSerialization: true,
+        parentRootElement,
       },
     );
 

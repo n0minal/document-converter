@@ -1,10 +1,9 @@
-import { convertableToString as ConvertibleToString, parseStringPromise } from 'xml2js';
-import { toXML } from 'jstoxml';
+import { XMLBuilder, XMLParser } from 'fast-xml-parser';
 import SerializableDocument from '../serializable-document';
 import { SerializationOptions } from '../serialization-options';
 import { SerializedType } from '../types';
 
-export type XmlType = ConvertibleToString;
+export type XmlType = string;
 
 export class XMLDocument extends SerializableDocument<XmlType> {
   constructor(
@@ -16,17 +15,24 @@ export class XMLDocument extends SerializableDocument<XmlType> {
   }
 
   async serialize(): Promise<SerializedType> {
-    if (this.options?.skipSerialization) {
+    const { skipSerialization, parentRootElement } = this.options || {};
+
+    if (skipSerialization) {
       return this.document as SerializedType;
     }
 
-    const data = await parseStringPromise(this.document);
-    this.serializedDocument = JSON.stringify(data);
+    const parser = new XMLParser({});
+    const data = parser.parse(this.document);
+    this.serializedDocument = JSON.stringify(parentRootElement ? data[parentRootElement] : data);
     return this.serializedDocument;
   }
 
   async deserialize(): Promise<XmlType> {
+    const { parentRootElement } = this.options || {};
     const raw = JSON.parse(this.serializedDocument as SerializedType);
-    return toXML(raw, { indent: '  ', header: true, _selfCloseTag: false });
+    const builder = new XMLBuilder({ format: false });
+    let xml = '<?xml version="1.0" encoding="UTF-8" ?>';
+    xml += builder.build(parentRootElement ? { [parentRootElement]: raw } : raw);
+    return xml;
   }
 }
