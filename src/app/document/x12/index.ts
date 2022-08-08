@@ -37,34 +37,60 @@ export class EdiX12Document extends SerializableDocument<EdiX12Type> {
 
       if (!segmentName) return;
 
-      const baseIndex = json[segmentName] ? Object.keys(json[segmentName]).length + 1 : 1;
-
       const newElements = Object.fromEntries(
         segmentData.map((element, index) => {
-          const elementName = `${segmentName}${baseIndex + index}`;
-          return [elementName, element.trim()];
+          const elementName = `${segmentName}${index + 1}`;
+          return [elementName, element];
         }),
       );
 
-      json[segmentName] = {
-        ...json[segmentName],
-        ...newElements,
-      };
+      // Repeated segments will be converted into an array of objects.
+      if (json[segmentName]) {
+        const elements = Array.isArray(json[segmentName])
+          ? [...json[segmentName]]
+          : [{ ...json[segmentName] }];
+
+        elements.push(newElements);
+        json[segmentName] = [...elements];
+      } else {
+        json[segmentName] = {
+          ...json[segmentName],
+          ...newElements,
+        };
+      }
     });
 
     this.serializedDocument = JSON.stringify(json);
     return this.serializedDocument;
   }
 
+  /**
+   * @about Converts a serialized JSON string into an X12 document.
+   */
   async deserialize(): Promise<EdiX12Type> {
     const raw = JSON.parse(this.serializedDocument);
+    const { elementDelimiter, segmentDelimiter } = this.options || {};
 
     let edi = '';
 
     Object.entries(raw).forEach(([segmentName, segmentData]) => {
-      edi += `${segmentName}${this.options.elementDelimiter}${Object.keys(segmentData)
-        .map((key) => segmentData[key])
-        .join(this.options.elementDelimiter)}${this.options.segmentDelimiter}`;
+      const elements = [];
+
+      Object.values(segmentData).forEach((element) => {
+        if (typeof element === 'object') {
+          const nestedElements = Object.values(element).join(elementDelimiter);
+          edi += `${segmentName}${elementDelimiter}${nestedElements}${segmentDelimiter}`;
+          return;
+        }
+
+        elements.push(element);
+      });
+
+      if (elements.length) {
+        edi += `${segmentName}${elementDelimiter}${elements.join(
+          elementDelimiter,
+        )}${segmentDelimiter}`;
+      }
     });
 
     return edi;
