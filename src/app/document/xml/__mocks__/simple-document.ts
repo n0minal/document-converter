@@ -19,4 +19,5 @@ export const simpleDocument = {
       ContactID2: 26,
     },
   }),
+  parentRootElement: 'root',
 };
