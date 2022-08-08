@@ -33,6 +33,38 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+# Converting Documents
+
+To convert a document you can simply issue a POST request to the `/convert` route:
+
+### Converting from EDI-X12 to JSON
+```sh
+curl --request POST \
+  --url 'http://localhost:3000/conversion?targetFormat=json&segmentDelimiter=~&elementDelimiter=*' \
+  --header 'Content-Type: application/edi-x12' \
+  --data '<your-x12-edi-text-goes-here>'
+```
+
+NOTE: Parameters: `segmentDelimiter` and `elementDelimiter` are always required when converting to and from EDI-X12.
+
+### Converting from XML to JSON
+```sh
+curl --request POST \
+  --url 'http://localhost:3000/conversion?targetFormat=json' \
+  --header 'Content-Type: application/xml' \
+  --data '<your-xml-content-goes-here>'
+```
+
+NOTE: if your XML content has a parent root element, make sure you send a querystring parameter called `parentRootElement` like so: `http://localhost:3000/conversion?targetFormat=json&parentRootElement=root`.
+
+### Converting from JSON to EDI-X12
+```sh
+curl --request POST \
+  --url 'http://localhost:3000/conversion?targetFormat=x12&elementDelimiter=*&segmentDelimiter=~' \
+  --header 'Content-Type: application/json' \
+  --data '<your-json-content-goes-here>'
+```
+NOTE: Parameters: `segmentDelimiter` and `elementDelimiter` are always required when converting to and from EDI-X12.
 
 # Adding support to a new document Type
 
